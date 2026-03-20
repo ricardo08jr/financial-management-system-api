@@ -1,0 +1,22 @@
+services: 
+    postgres:
+        image: postgres:15
+        container_name: financial_db
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: finance-db
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: admin
+        
+    api:
+        build: ./financial
+        container_name: financial-api
+        depends_on:
+            - postgres
+        ports:
+            - "8080:8080"
+        environment:
+            DATASOURCE_URL: jdbc:postgresql://postgres:5432/financial_db
+            DATASOURCE_USERNAME: admin
+            DATASOURCE_PASSWORD: admin
